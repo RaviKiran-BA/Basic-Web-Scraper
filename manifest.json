@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Web Data Scraper",
+  "version": "1.0",
+  "description": "Extract data from web pages with custom selectors",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Web Data Scraper"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

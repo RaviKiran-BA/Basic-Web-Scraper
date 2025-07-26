@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 350px;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            color: #333;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            margin: 0 0 20px 0;
+            color: #4a5568;
+            text-align: center;
+            font-size: 1.8em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .result-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-size: 13px;
+        }
+        
+        .preset-buttons {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .preset-btn {
+            flex: 1;
+            padding: 8px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .preset-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        #status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #feb2b2;
+        }
+        /* New styles for improvements */
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .action-row button {
+            width: auto;
+            flex: 1;
+            margin-top: 0;
+        }
+        .dedupe-row {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕷️ Web Scraper</h1>
+        
+        <div class="preset-buttons">
+            <button class="preset-btn" id="headingsBtn">Headings</button>
+            <button class="preset-btn" id="linksBtn">Links</button>
+            <button class="preset-btn" id="imagesBtn">Images</button>
+        </div>
+        
+        <div class="input-group">
+            <label for="selector">CSS Selector:</label>
+            <input type="text" id="selector" placeholder="e.g., h1, .class-name, #id" />
+        </div>
+        
+        <div class="input-group">
+            <label for="attribute">Extract:</label>
+            <select id="attribute">
+                <option value="textContent">Text Content</option>
+                <option value="innerHTML">HTML Content</option>
+                <option value="href">Link URL</option>
+                <option value="src">Image/Source URL</option>
+                <option value="alt">Alt Text</option>
+                <option value="title">Title Attribute</option>
+                <option value="className">CSS Classes</option>
+            </select>
+        </div>
+
+        <div class="dedupe-row">
+            <label><input type="checkbox" id="dedupe"> Remove duplicates</label>
+        </div>
+
+        <div class="action-row">
+            <button id="scrapeBtn">🚀 Scrape Data</button>
+            <button id="exportBtn" style="background: linear-gradient(135deg, #ed8936, #dd6b20);">📄 Export CSV</button>
+            <button id="copyResultsBtn" style="background: linear-gradient(135deg, #48bb78, #38a169);">📋 Copy Results</button>
+            <button id="clearBtn" style="background: linear-gradient(135deg, #e53e3e, #c53030);">🧹 Clear</button>
+        </div>
+        
+        <div id="status"></div>
+        <div id="results"></div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
